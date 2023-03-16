@@ -31,6 +31,9 @@ class Player(Game_object):
     def load_moving(self):
         self.pl_move_sprites = arcade.AnimatedWalkingSprite(scale=adventurer.get("scale"))
 
+        """
+        IDLE animation
+        """
         self.pl_move_sprites.stand_right_textures = [
             arcade.load_texture(f"sprites/player/adventure/adventurer-idle-0{num}.png") for num in range(4)]
 
@@ -38,6 +41,9 @@ class Player(Game_object):
             arcade.load_texture(f"sprites/player/adventure/adventurer-idle-0{num}.png", mirrored=True) 
             for num in range(4)]
 
+        """
+        Walk animation
+        """
         self.pl_move_sprites.walk_right_textures = [
             arcade.load_texture(f"sprites/player/adventure/adventurer-run-0{num}.png") for num in range(6)]
 
@@ -45,6 +51,9 @@ class Player(Game_object):
             arcade.load_texture(f"sprites/player/adventure/adventurer-run-0{num}.png", mirrored=True)
             for num in range(6)]
 
+        """
+        Set variables
+        """
         self.pl_move_sprites.center_x = self.x_cord
         self.pl_move_sprites.center_y = self.y_cord
 
@@ -67,7 +76,9 @@ class Player(Game_object):
 
 
     def out_of_bounds(self):
-        # Check for out-of-bounds
+        """
+        Check for out-of-bounds
+        """
         if self.pl_move_sprites.center_x <= 0:
             self.pl_move_sprites.center_x = 0
             self.pl_move_sprites.change_x = 0
