@@ -3,9 +3,15 @@ import arcade
 from objects.game_object import Game_object
 from objects.player_variable import adventurer
 
+from objects.utils.overrideAnimatedWalkingSprite \
+    import OverrideAnimatedWalkingSprite as AnimatedWalkingSprite
+
 
 class Player(Game_object):
     def __init__(self):
+        """
+        Load
+        """
         super().__init__(coords=adventurer.get("coords"),
                         movespeed=adventurer.get("movespeed"), 
                         hp=adventurer.get("hp"), 
@@ -13,27 +19,18 @@ class Player(Game_object):
                         armor=adventurer.get("armor"), 
                         cd=adventurer.get("cd"))
 
-        """
-        Load
-        """
-        self.load_moving()
-
-        """
-        Set variables
-        """
-        self.mRight = False
-        self.mLeft = False
+        self.adventurer_load_animation()
 
 
     """
     Load sprites
     """
-    def load_moving(self):
-        self.pl_move_sprites = arcade.AnimatedWalkingSprite(scale=adventurer.get("scale"))
-
+    def adventurer_load_animation(self):
         """
         IDLE animation
         """
+        self.pl_move_sprites.scale = adventurer.get("scale")
+
         self.pl_move_sprites.stand_right_textures = [
             arcade.load_texture(f"sprites/player/adventure/adventurer-idle-0{num}.png") for num in range(4)]
 
@@ -57,72 +54,4 @@ class Player(Game_object):
         self.pl_move_sprites.center_x = self.x_cord
         self.pl_move_sprites.center_y = self.y_cord
 
-        self.pl_sprite_list = arcade.SpriteList()
         self.pl_sprite_list.append(self.pl_move_sprites)
-
-
-    """
-    Moving function
-    """
-    def set_x_move(self):
-        if not self.mLeft and self.mRight:
-            self.pl_move_sprites.change_x = self.movespeed
-
-        elif self.mLeft and not self.mRight:
-            self.pl_move_sprites.change_x = -self.movespeed
-
-        else:
-            self.pl_move_sprites.change_x = 0
-
-
-    def out_of_bounds(self):
-        """
-        Check for out-of-bounds
-        """
-        if self.pl_move_sprites.center_x <= 0:
-            self.pl_move_sprites.center_x = 0
-            self.pl_move_sprites.change_x = 0
-            
-        elif self.pl_move_sprites.center_x >= 1024:
-            self.pl_move_sprites.center_x = 1024
-            self.pl_move_sprites.change_x = 0
-
-
-    """
-    Key press and key release functions
-    """
-    def move_key_press(self, symbol: int):
-        if symbol == arcade.key.RIGHT:
-            self.mRight = True
-            self.set_x_move()
-
-        elif symbol == arcade.key.LEFT:
-            self.mLeft = True
-            self.set_x_move()
-
-
-    def move_key_release(self, symbol: int):
-        if symbol == arcade.key.RIGHT:
-            self.mRight = False
-            self.set_x_move()
-
-        elif symbol == arcade.key.LEFT:
-            self.mLeft = False
-            self.set_x_move()
-
-
-    """
-    Animation functions
-    """
-    def update_animation(self, delta_time: float):
-        self.pl_sprite_list.update_animation(delta_time=delta_time)
-        self.pl_sprite_list.update()
-
-        self.out_of_bounds()
-
-
-            
-    def draw(self):
-        self.pl_sprite_list.draw()
-
-
