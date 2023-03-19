@@ -1,11 +1,11 @@
 import arcade
 
 from game_window import GameWindow
-from variables import FPS
+from variables import FPS, WIDTH, HEIGHT
 
 
 def main():
-    GameWindow(1024, 768, 'CupSouls', FPS=FPS)
+    GameWindow(WIDTH, HEIGHT, 'CupSouls', FPS=FPS)
     arcade.run()
 
 

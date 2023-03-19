@@ -80,16 +80,21 @@ class OverrideAnimatedWalkingSprite(AnimatedWalkingSprite):
         ):
             self.state = FACE_UP
             change_direction = True
+        elif (
+            self.change_y == 0
+            and self.change_x == 0
+            and self.state != FACE_LEFT
+            and len(self.walk_right_textures) > 0
+        ):
+            self.state = FACE_RIGHT
+            change_direction = True
+
 
         if self.change_x == 0 and self.change_y == 0:
             if self.state == FACE_LEFT:
                 texture_list = self.stand_left_textures
             elif self.state == FACE_RIGHT:
                 texture_list = self.stand_right_textures
-            elif self.state == FACE_UP:
-                texture_list = self.walk_up_textures
-            elif self.state == FACE_DOWN:
-                texture_list = self.walk_down_textures
 
 
             if self.count_time < delta_time:
@@ -136,11 +141,24 @@ class OverrideAnimatedWalkingSprite(AnimatedWalkingSprite):
                         "update_animation was called on a sprite that doesn't have a list of walk down textures."
                     )
 
-            self.cur_texture_index += 1
-            if self.cur_texture_index >= len(texture_list):
-                self.cur_texture_index = 0
+            if self.state == FACE_UP:
+                if self.count_time < delta_time:
+                    self.count_time += delta_time / 5
 
-            self.texture = texture_list[self.cur_texture_index]
+                else:
+                    self.count_time = 0
+                    self.cur_texture_index += 1
+                    if self.cur_texture_index >= len(texture_list):
+                        self.cur_texture_index = 0
+
+                    self.texture = texture_list[self.cur_texture_index]
+
+            else:
+                self.cur_texture_index += 1
+                if self.cur_texture_index >= len(texture_list):
+                    self.cur_texture_index = 0
+
+                self.texture = texture_list[self.cur_texture_index]
 
         if self._texture is None:
             print("Error, no texture set")

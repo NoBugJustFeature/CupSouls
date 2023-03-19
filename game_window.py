@@ -26,7 +26,7 @@ class GameWindow(arcade.Window):
 
 
     def setup(self):
-        self.pl = Player()
+        self.pl = Player("adventurer")
 
 
     """
@@ -37,7 +37,7 @@ class GameWindow(arcade.Window):
 
 
     def on_key_release(self, symbol: int, modifiers: int):
-        self.pl.move_key_release(symbol=symbol)       
+        self.pl.move_key_release(symbol=symbol)
 
 
     """
@@ -45,6 +45,9 @@ class GameWindow(arcade.Window):
     """
     def on_update(self, delta_time: float):
         self.pl.update_animation(delta_time=delta_time)
+        self.pl.update_jump()
+
+        self.pl.gravity()
 
 
     def on_draw(self):
