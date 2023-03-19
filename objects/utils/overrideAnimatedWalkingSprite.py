@@ -141,24 +141,13 @@ class OverrideAnimatedWalkingSprite(AnimatedWalkingSprite):
                         "update_animation was called on a sprite that doesn't have a list of walk down textures."
                     )
 
-            if self.state == FACE_UP:
-                if self.count_time < delta_time:
-                    self.count_time += delta_time / 5
+            #TODO: каждую вторую воспроизвоить и менять true и false
 
-                else:
-                    self.count_time = 0
-                    self.cur_texture_index += 1
-                    if self.cur_texture_index >= len(texture_list):
-                        self.cur_texture_index = 0
+            self.cur_texture_index += 1
+            if self.cur_texture_index >= len(texture_list):
+                self.cur_texture_index = 0
 
-                    self.texture = texture_list[self.cur_texture_index]
-
-            else:
-                self.cur_texture_index += 1
-                if self.cur_texture_index >= len(texture_list):
-                    self.cur_texture_index = 0
-
-                self.texture = texture_list[self.cur_texture_index]
+            self.texture = texture_list[self.cur_texture_index]
 
         if self._texture is None:
             print("Error, no texture set")
