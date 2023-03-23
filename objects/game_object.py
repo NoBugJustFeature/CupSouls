@@ -1,8 +1,8 @@
 from typing import Tuple
 import arcade
 
-from objects.utils.overrideAnimatedWalkingSprite \
-    import OverrideAnimatedWalkingSprite as AnimatedWalkingSprite
+from objects.utils.overrideSprite \
+    import OverrideSprite as Sprite
 
 from variables import WIDTH, HEIGHT
 
@@ -41,7 +41,7 @@ class Game_object():
         self.gravity_constant: float = 5
         self.floor_constant: int = 175 # = self.y_cord
 
-        self.pl_sprites = AnimatedWalkingSprite()
+        self.pl_sprites = Sprite()
         self.pl_sprite_list = arcade.SpriteList()
 
 
@@ -121,6 +121,9 @@ class Game_object():
             self.mJump = True
             self.jump_max_height = self.pl_sprites.center_y + self.jump_height
             self.set_y_move()
+
+
+        arcade.lib_location
     
 
     def move_key_release(self, symbol: int):
