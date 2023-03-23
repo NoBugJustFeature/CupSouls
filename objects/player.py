@@ -47,7 +47,6 @@ class Player(Game_object):
             arcade.load_texture(f"sprites/player/adventure/adventurer-run-0{num}.png", mirrored=True)
                 for num in range(6)]
 
-
         """
         Jump animation
         """

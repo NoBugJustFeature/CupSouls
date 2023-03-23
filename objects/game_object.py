@@ -147,10 +147,8 @@ class Game_object():
     """
     def update_animation(self, delta_time: float):
         self.pl_sprite_list.update_animation(delta_time=delta_time)
-        self.pl_sprite_list.update()
 
         self.out_of_bounds()
-
         self.gravity()
 
 

@@ -19,7 +19,6 @@ JUMP = 2
 FALL = 3
 
 
-
 class OverrideSprite(Sprite):
     def __init__(
         self,
@@ -102,7 +101,6 @@ class OverrideSprite(Sprite):
             change_direction = True
         elif (
             self.change_y > 0
-            and self.change_x == 0
             and self.state_y != JUMP
         ):
             self.state_y = JUMP
@@ -129,9 +127,8 @@ class OverrideSprite(Sprite):
         if self.state_y == STAND:
             if self.state_x == LEFT:
                 texture_list = self.stand_left_textures
-                print("stand left")
+
             elif self.state_x == RIGHT:
-                print("stand right")
                 texture_list = self.stand_right_textures
 
             """
@@ -150,61 +147,53 @@ class OverrideSprite(Sprite):
             self.last_texture_change_center_x = self.center_x
             self.last_texture_change_center_y = self.center_y
 
+
             if self.state_y == FALL:
                 if self.state_x == RIGHT:
                     texture_list = self.fall_right_textures
-                    print("fall right")
+
                 elif self.state_x == LEFT:
                     texture_list = self.fall_left_textures
-                    print("fall left")
+
                 self.texture_change_distance = 20
-                if texture_list is None or len(texture_list) == 0:
-                    raise RuntimeError(
-                        "update_animation was called on a sprite that doesn't have a list of textures."
-                    )
+
 
             elif self.state_y == JUMP:
                 if self.state_x == RIGHT:
                     texture_list = self.jump_right_textures
-                    print("jump right")
+
                 elif self.state_x == LEFT:
                     texture_list = self.jump_left_textures
-                    print("jump left")
+
                 self.texture_change_distance = 60
-                if texture_list is None or len(texture_list) == 0:
-                    raise RuntimeError(
-                        "update_animation was called on a sprite that doesn't have a list of textures."
-                    )
+
 
             elif self.state_y == WALK:
                 if self.state_x == RIGHT:
-                    print("walk right")
                     texture_list = self.walk_right_textures
+
                 elif self.state_x == LEFT:
-                    print("walk left")
                     texture_list = self.walk_left_textures
+
                 self.texture_change_distance = 20
-                if texture_list is None or len(texture_list) == 0:
-                    raise RuntimeError(
-                        "update_animation was called on a sprite that doesn't have a list of textures."
-                    )
-              
+
 
             self.change_sprite(texture_list)
 
-        if self._texture is None:
-            print("Error, no texture set")
-        else:
+        
+        if self._texture:
             self.width = self._texture.width * self.scale
             self.height = self._texture.height * self.scale
-
+        self.update()
 
     def change_sprite(self, texture_list):
-            self.cur_texture_index += 1
-            if self.cur_texture_index >= len(texture_list):
-                self.cur_texture_index = 0
+        if texture_list is None or len(texture_list) == 0:
+            raise RuntimeError(
+                "update_animation was called on a sprite that doesn't have a list of textures."
+            )
 
-            self.texture = texture_list[self.cur_texture_index]
+        self.cur_texture_index += 1
+        if self.cur_texture_index >= len(texture_list):
+            self.cur_texture_index = 0
 
-
-            
+        self.texture = texture_list[self.cur_texture_index]
