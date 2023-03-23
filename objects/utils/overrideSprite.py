@@ -2,14 +2,8 @@ from arcade import Sprite
 
 from math import sqrt
 from arcade import Texture
-from typing import (
-    Any,
-    cast,
-    Dict,
-    List,
-    Optional,
-    TYPE_CHECKING,
-)
+from typing import List
+
 
 """
 Direction variables
