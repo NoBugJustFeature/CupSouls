@@ -26,7 +26,6 @@ class Player(Game_object):
     Load sprites
     """
     def adventurer_load_animation(self):
-
         """
         IDLE animation
         """
@@ -65,6 +64,16 @@ class Player(Game_object):
 
         self.pl_sprites.fall_left_textures = [
             arcade.load_texture(f"sprites/player/adventure/adventurer-jump-00.png", mirrored=True)]
+
+        """
+        Attack animation
+        """
+        self.pl_sprites.attack_right_textures = [
+            arcade.load_texture(f"sprites/player/adventure/adventurer-attack1-0{num}.png") for num in range(4)]
+
+        self.pl_sprites.attack_left_textures = [
+            arcade.load_texture(f"sprites/player/adventure/adventurer-attack1-0{num}.png", mirrored=True)
+                for num in range(4)]
 
         """
         Set variables

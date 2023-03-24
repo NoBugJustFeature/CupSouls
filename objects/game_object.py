@@ -31,6 +31,7 @@ class Game_object():
         self.mRight = False
         self.mLeft = False
         self.mJump = False
+        self.sAttack = False
 
         self.jump_time = 0
         self.jump_time_max = 2
@@ -106,6 +107,15 @@ class Game_object():
 
 
     """
+    Attack function
+    """
+    def attack(self):
+        
+        self.pl_sprites.state_attack = self.sAttack
+        
+
+
+    """
     Key press and key release functions
     """
     def move_key_press(self, symbol: int):
@@ -122,8 +132,15 @@ class Game_object():
             self.jump_max_height = self.pl_sprites.center_y + self.jump_height
             self.set_y_move()
 
+        if symbol == arcade.key.Z:
+            self.sAttack = True
+            self.attack()
 
-        arcade.lib_location
+        """
+        Debug key
+        """
+        if symbol == arcade.key.TAB:
+            self.pl_sprites.debug = True
     
 
     def move_key_release(self, symbol: int):
@@ -139,6 +156,17 @@ class Game_object():
             self.mJump = False
             self.jump_max_height = 0
             self.set_y_move()
+
+        if symbol == arcade.key.Z:
+            self.sAttack = False
+            self.attack()
+
+        """
+        Debug key
+        """
+        if symbol == arcade.key.TAB:
+            self.pl_sprites.debug = False
+    
 
 
 

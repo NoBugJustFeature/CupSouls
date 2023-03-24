@@ -39,9 +39,10 @@ class OverrideSprite(Sprite):
         """
         Variables
         """
-        #Direction
-        self.state_x = RIGHT
-        self.state_y = STAND
+        #States
+        self.__state_x = RIGHT
+        self.__state_y = STAND
+        self.state_attack: bool = False
 
         #Sprites
         self.stand_right_textures: List[Texture] = []
@@ -52,6 +53,10 @@ class OverrideSprite(Sprite):
         self.jump_left_textures: List[Texture] = []
         self.fall_right_textures: List[Texture] = []
         self.fall_left_textures: List[Texture] = []
+        self.attack_right_textures: List[Texture] = []
+        self.attack_left_textures: List[Texture] = []
+        self.hurt_right_textures: List[Texture] = []
+        self.hurt_left_textures: List[Texture] = []
 
         #Oher
         self.cur_texture_index = 0
@@ -60,7 +65,10 @@ class OverrideSprite(Sprite):
         self.last_texture_change_center_x: float = 0
         self.last_texture_change_center_y: float = 0
 
-        self.idle_sprite_show_counter = 0
+        self.__idle_sprite_show_counter = 0
+
+        #Debug
+        self.debug = False
 
 
     def update_animation(self, delta_time: float = 1 / 60, duration: float = 1/60):
@@ -80,111 +88,146 @@ class OverrideSprite(Sprite):
         """
         if (
             self.change_x > 0
-            and self.state_x != RIGHT
+            and self.__state_x != RIGHT
         ):
-            self.state_x = RIGHT
+            self.__state_x = RIGHT
             change_direction = True
         elif (
             self.change_x < 0
-            and self.state_x != LEFT
+            and self.__state_x != LEFT
         ):
-            self.state_x = LEFT
+            self.__state_x = LEFT
             change_direction = True
         """
         Direction y
         """
         if (
             self.change_y < 0
-            and self.state_y != FALL
+            and self.__state_y != FALL
         ):
-            self.state_y = FALL
+            self.__state_y = FALL
             change_direction = True
         elif (
             self.change_y > 0
-            and self.state_y != JUMP
+            and self.__state_y != JUMP
         ):
-            self.state_y = JUMP
+            self.__state_y = JUMP
             change_direction = True
         elif (
             self.change_y == 0
             and self.change_x == 0
-            and self.state_y != STAND
+            and self.__state_y != STAND
         ):
-            self.state_y = STAND
+            self.__state_y = STAND
             change_direction = True
         elif (
             self.change_y == 0 
             and self.change_x != 0
-            and self.state_y != WALK
+            and self.__state_y != WALK
         ):
-            self.state_y = WALK
+            self.__state_y = WALK
             change_direction = True
 
+            
+        """
+        Load sprites
+        """
+        #Attack
+        if self.state_attack:
+            if self.__state_x == LEFT:
+                texture_list = self.attack_left_textures
 
-        """
-        IDLE
-        """
-        if self.state_y == STAND:
-            if self.state_x == LEFT:
+            elif self.__state_x == RIGHT:
+                texture_list = self.attack_right_textures
+
+            self.texture_change_distance = 20
+            self.slowed_change_sprite(texture_list, 4)
+
+        #IDLE
+        elif self.__state_y == STAND:
+            if self.__state_x == LEFT:
                 texture_list = self.stand_left_textures
 
-            elif self.state_x == RIGHT:
+            elif self.__state_x == RIGHT:
                 texture_list = self.stand_right_textures
 
-            """
-            For slowing animation
-            """
-            if self.idle_sprite_show_counter == 7:
-                self.change_sprite(texture_list)
-                self.idle_sprite_show_counter=0
+            self.texture_change_distance = 20
+            self.slowed_change_sprite(texture_list, 6)    
 
-            self.idle_sprite_show_counter+=1      
-
-            """
-            Move
-            """
+        #Move         
         elif change_direction or distance >= self.texture_change_distance:
             self.last_texture_change_center_x = self.center_x
             self.last_texture_change_center_y = self.center_y
 
-
-            if self.state_y == FALL:
-                if self.state_x == RIGHT:
-                    texture_list = self.fall_right_textures
-
-                elif self.state_x == LEFT:
-                    texture_list = self.fall_left_textures
-
-                self.texture_change_distance = 20
-
-
-            elif self.state_y == JUMP:
-                if self.state_x == RIGHT:
-                    texture_list = self.jump_right_textures
-
-                elif self.state_x == LEFT:
-                    texture_list = self.jump_left_textures
-
-                self.texture_change_distance = 60
-
-
-            elif self.state_y == WALK:
-                if self.state_x == RIGHT:
+            if self.__state_y == WALK:  
+                if self.__state_x == RIGHT:
                     texture_list = self.walk_right_textures
 
-                elif self.state_x == LEFT:
+                elif self.__state_x == LEFT:
                     texture_list = self.walk_left_textures
 
                 self.texture_change_distance = 20
+                self.change_sprite(texture_list)
+ 
 
+            elif self.__state_y == FALL:
+                if self.__state_x == RIGHT:
+                    texture_list = self.fall_right_textures
 
-            self.change_sprite(texture_list)
+                elif self.__state_x == LEFT:
+                    texture_list = self.fall_left_textures
+
+                self.texture_change_distance = 20
+                self.change_sprite(texture_list)
+ 
+                
+            elif self.__state_y == JUMP:
+                if self.__state_x == RIGHT:
+                    texture_list = self.jump_right_textures
+
+                elif self.__state_x == LEFT:
+                    texture_list = self.jump_left_textures
+
+                self.texture_change_distance = 60
+                self.slowed_change_sprite(texture_list, 4)
+
+            """
+            Reset cursor
+            """
+            if change_direction:
+                self.cur_texture_index = 0
+                self.__idle_sprite_show_counter = 0
 
         
         if self._texture:
             self.width = self._texture.width * self.scale
             self.height = self._texture.height * self.scale
+
         self.update()
+
+        if self.debug:
+            print(change_direction,
+                len(texture_list),
+                self.__state_y,
+                self.__state_x, 
+                distance,
+                self.state_attack,
+                self.cur_texture_index,
+                self.change_x,
+                self.change_y
+            )
+
+
+    """
+    For slowing animation
+    """
+    def slowed_change_sprite(self, texture_list, slow):
+            if self.__idle_sprite_show_counter == slow:
+                self.change_sprite(texture_list)
+                self.__idle_sprite_show_counter=0
+
+            self.__idle_sprite_show_counter+=1
+
 
     def change_sprite(self, texture_list):
         if texture_list is None or len(texture_list) == 0:
