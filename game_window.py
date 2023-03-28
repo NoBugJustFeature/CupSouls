@@ -1,6 +1,9 @@
 import arcade
 
 from objects.player import Player
+from objects.enemy import Enemy
+
+import random
 
 
 class GameWindow(arcade.Window):
@@ -28,6 +31,8 @@ class GameWindow(arcade.Window):
     def setup(self):
         self.pl = Player("adventurer")
 
+        self.en = Enemy((random.choice([-10, self.width+10]),190))
+
 
     """
     Updating the keys
@@ -41,16 +46,19 @@ class GameWindow(arcade.Window):
 
 
     """
-    Updating the screen
+    Updating
     """
     def on_update(self, delta_time: float):
-        self.pl.update_animation(delta_time=delta_time)
+        self.pl.update(delta_time=delta_time)
         self.pl.update_jump()
 
         self.pl.gravity()
+
+        self.en.update(delta_time=delta_time, player_x_cord=self.pl.pl_sprites.center_x)
 
 
     def on_draw(self):
         arcade.start_render()
         arcade.draw_texture_rectangle(self.width/2, self.height/2, width=self.width, height=self.height, texture=self.background)
         self.pl.draw()
+        self.en.draw()

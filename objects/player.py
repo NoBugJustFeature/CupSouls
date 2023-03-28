@@ -1,10 +1,10 @@
 import arcade
 
-from objects.game_object import Game_object
+from objects.player_object import Player_object
 from objects.player_variable import adventurer as adv
 
 
-class Player(Game_object):
+class Player(Player_object):
     def __init__(self, hero: str = "adventurer"):
         """
         Load

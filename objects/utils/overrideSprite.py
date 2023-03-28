@@ -43,6 +43,7 @@ class OverrideSprite(Sprite):
         self.__state_x = RIGHT
         self.__state_y = STAND
         self.state_attack: bool = False
+        self.state_hurt: bool = False
 
         #Sprites
         self.stand_right_textures: List[Texture] = []
@@ -143,6 +144,17 @@ class OverrideSprite(Sprite):
             self.texture_change_distance = 20
             self.slowed_change_sprite(texture_list, 4)
 
+        #Hurt
+        if self.state_hurt:
+            if self.__state_x == LEFT:
+                texture_list = self.hurt_left_textures
+
+            elif self.__state_x == RIGHT:
+                texture_list = self.hurt_right_textures
+
+            self.texture_change_distance = 20
+            self.slowed_change_sprite(texture_list, 4)
+
         #IDLE
         elif self.__state_y == STAND:
             if self.__state_x == LEFT:
@@ -192,7 +204,7 @@ class OverrideSprite(Sprite):
                 self.slowed_change_sprite(texture_list, 4)
 
             """
-            Reset cursor
+            Reset cursor and counter
             """
             if change_direction:
                 self.cur_texture_index = 0
