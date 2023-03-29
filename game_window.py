@@ -50,9 +50,6 @@ class GameWindow(arcade.Window):
     """
     def on_update(self, delta_time: float):
         self.pl.update(delta_time=delta_time)
-        self.pl.update_jump()
-
-        self.pl.gravity()
 
         self.en.update(delta_time=delta_time, player_x_cord=self.pl.pl_sprites.center_x)
 

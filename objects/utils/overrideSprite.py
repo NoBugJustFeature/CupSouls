@@ -133,17 +133,6 @@ class OverrideSprite(Sprite):
         """
         Load sprites
         """
-        #Attack
-        if self.state_attack:
-            if self.__state_x == LEFT:
-                texture_list = self.attack_left_textures
-
-            elif self.__state_x == RIGHT:
-                texture_list = self.attack_right_textures
-
-            self.texture_change_distance = 20
-            self.slowed_change_sprite(texture_list, 4)
-
         #Hurt
         if self.state_hurt:
             if self.__state_x == LEFT:
@@ -151,6 +140,17 @@ class OverrideSprite(Sprite):
 
             elif self.__state_x == RIGHT:
                 texture_list = self.hurt_right_textures
+
+            self.texture_change_distance = 20
+            self.slowed_change_sprite(texture_list, 4)
+
+        #Attack
+        elif self.state_attack:
+            if self.__state_x == LEFT:
+                texture_list = self.attack_left_textures
+
+            elif self.__state_x == RIGHT:
+                texture_list = self.attack_right_textures
 
             self.texture_change_distance = 20
             self.slowed_change_sprite(texture_list, 4)

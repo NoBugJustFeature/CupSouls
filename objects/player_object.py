@@ -7,6 +7,13 @@ from objects.utils.overrideSprite \
 from variables import WIDTH, HEIGHT
 
 
+"""
+Directions
+"""
+RIGHT = 0
+LEFT = 1
+
+
 class Player_object():
     def __init__(self, 
                 coords: Tuple[float, float],
@@ -32,6 +39,8 @@ class Player_object():
         self.state_left = False
         self.state_jump = False
         self.state_attack = False
+        self.damage_resistance = False
+        self.state_dash = False
 
         self.jump_max_height=0
 
@@ -107,15 +116,30 @@ class Player_object():
     """
     def attack(self):
         self.pl_sprites.state_attack = self.state_attack
-        
 
-        
 
+    """
+    Dash finction
+    """
+    def dash(self, direction):
+        if not self.state_dash:
+            self.state_dash = True
+            self.damage_resistance = True
+            if direction == RIGHT:
+                self.pl_sprites.center_x += self.movespeed*50
+            elif direction == LEFT:
+                self.pl_sprites.center_x -= self.movespeed*50
+            
 
     """
     Key press and key release functions
     """
     def move_key_press(self, symbol: int):
+        if symbol == arcade.key.Z:
+            self.dash(LEFT)
+        elif symbol == arcade.key.C:
+            self.dash(RIGHT)
+
         if symbol == arcade.key.RIGHT:
             self.state_right = True
             self.set_x_move()
@@ -127,9 +151,10 @@ class Player_object():
         if symbol == arcade.key.UP or symbol == arcade.key.SPACE:
             self.state_jump = True
             self.jump_max_height = self.pl_sprites.center_y + self.jump_height
+
             self.set_y_move()
 
-        if symbol == arcade.key.Z:
+        if symbol == arcade.key.X:
             self.state_attack = True
             self.attack()
 
@@ -154,9 +179,13 @@ class Player_object():
             self.jump_max_height = 0
             self.set_y_move()
 
-        if symbol == arcade.key.Z:
+        if symbol == arcade.key.X:
             self.state_attack = False
             self.attack()
+
+        if symbol == arcade.key.Z or symbol == arcade.key.C:
+            self.state_dash = False
+            self.damage_resistance = False
 
         """
         Debug key
@@ -174,6 +203,8 @@ class Player_object():
         self.pl_sprite_list.update_animation(delta_time=delta_time)
 
         self.out_of_bounds()
+
+        self.update_jump()
         self.gravity()
 
 
