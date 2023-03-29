@@ -11,13 +11,14 @@ class Player(Player_object):
         """
         if hero == "adventurer":
             super().__init__(coords=adv.get("coords"),
-                            movespeed=adv.get("movespeed"), 
+                            movespeed=adv.get("movespeed"),
+                            dash_distance_mult=adv.get("dash_distance_mult"),
                             jump_height=adv.get("jump_height"),
                             jump_speed=adv.get( "jump_speed"),
                             hp=adv.get("hp"), 
                             damage=adv.get("da"),
                             armor=adv.get("armor"), 
-                            cd=adv.get("cd"))
+                            armor_cd=adv.get("cd"))
 
             self.adventurer_load_animation()
 

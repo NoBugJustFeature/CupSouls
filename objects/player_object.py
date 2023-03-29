@@ -18,22 +18,24 @@ class Player_object():
     def __init__(self, 
                 coords: Tuple[float, float],
                 movespeed: float,
+                dash_distance_mult: float,
                 jump_height: float,
                 jump_speed: float,
                 hp: int, 
                 damage: float, 
                 armor: int, #similar hp, but can recovery
-                cd: float #armor recovery time (in seconds)
+                armor_cd: float #armor recovery time (in seconds)
                 ):
         self.x_cord = coords[0]
         self.y_cord = coords[1]
         self.movespeed = movespeed
+        self.dash_distance = self.movespeed * dash_distance_mult
         self.jump_height = jump_height
         self.jump_speed = jump_speed
         self.hp = hp
         self.damage = damage
         self.armor = armor
-        self.cd = cd
+        self.armor_cd = armor_cd
 
         self.state_right = False
         self.state_left = False
@@ -126,9 +128,9 @@ class Player_object():
             self.state_dash = True
             self.damage_resistance = True
             if direction == RIGHT:
-                self.pl_sprites.center_x += self.movespeed*50
+                self.pl_sprites.center_x += self.movespeed*25
             elif direction == LEFT:
-                self.pl_sprites.center_x -= self.movespeed*50
+                self.pl_sprites.center_x -= self.movespeed*25
             
 
     """
