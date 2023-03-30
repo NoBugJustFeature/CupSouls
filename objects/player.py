@@ -16,9 +16,8 @@ class Player(Player_object):
                             jump_height=adv.get("jump_height"),
                             jump_speed=adv.get( "jump_speed"),
                             hp=adv.get("hp"), 
-                            damage=adv.get("da"),
-                            armor=adv.get("armor"), 
-                            armor_cd=adv.get("cd"))
+                            damage=adv.get("damage"),
+                            frames_hurt=adv.get("frames_hurt"))
 
             self.adventurer_load_animation()
 
@@ -75,6 +74,16 @@ class Player(Player_object):
         self.pl_sprites.attack_left_textures = [
             arcade.load_texture(f"sprites/player/adventure/adventurer-attack1-0{num}.png", mirrored=True)
                 for num in range(4)]
+
+        """
+        Hurt animation
+        """
+        self.pl_sprites.hurt_right_textures = [
+            arcade.load_texture(f"sprites/player/adventure/adventurer-hurt-0{num}.png") for num in range(3)]
+
+        self.pl_sprites.hurt_left_textures = [
+            arcade.load_texture(f"sprites/player/adventure/adventurer-hurt-0{num}.png", mirrored=True)
+                for num in range(3)]
 
         """
         Set variables

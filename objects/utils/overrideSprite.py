@@ -142,7 +142,7 @@ class OverrideSprite(Sprite):
                 texture_list = self.hurt_right_textures
 
             self.texture_change_distance = 20
-            self.slowed_change_sprite(texture_list, 4)
+            self.slowed_change_sprite(texture_list, 8)
 
         #Attack
         elif self.state_attack:
@@ -217,6 +217,9 @@ class OverrideSprite(Sprite):
 
         self.update()
 
+        """
+        Debug
+        """
         if self.debug:
             print(change_direction,
                 len(texture_list),
@@ -251,4 +254,4 @@ class OverrideSprite(Sprite):
         if self.cur_texture_index >= len(texture_list):
             self.cur_texture_index = 0
 
-        self.texture = texture_list[self.cur_texture_index]
+        self.texture = texture_list[self.cur_texture_index]       

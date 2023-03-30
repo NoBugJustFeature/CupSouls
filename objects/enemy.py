@@ -12,7 +12,9 @@ class Enemy (Enemy_object):
         super().__init__(coords=coords,
                         movespeed=DK.get("movespeed"), 
                         hp=DK.get("hp"), 
-                        damage=DK.get("damage"))
+                        damage=DK.get("damage"),
+                        frames_befor_attack=DK.get("frames_befor_attack"),
+                        frames_hurt=DK.get("frames_hurt"))
 
         self.DK_load_animation()
 
@@ -80,6 +82,26 @@ class Enemy (Enemy_object):
             height=80,
             mirrored=True) 
             for i in range(12)]
+
+        """
+        Hurt animation
+        """
+        self.en_sprites.hurt_right_textures = [
+            arcade.load_texture(f"sprites/enemies/DarkKnight/NightBorne.png",
+            x=80*i,
+            y=320,
+            width=80,
+            height=80) 
+            for i in range(5)]
+
+        self.en_sprites.hurt_left_textures = [
+            arcade.load_texture(f"sprites/enemies/DarkKnight/NightBorne.png",
+            x=80*i,
+            y=320,
+            width=80,
+            height=80,
+            mirrored=True) 
+            for i in range(5)]
 
         """
         Set variables

@@ -22,9 +22,8 @@ class Player_object():
                 jump_height: float,
                 jump_speed: float,
                 hp: int, 
-                damage: float, 
-                armor: int, #similar hp, but can recovery
-                armor_cd: float #armor recovery time (in seconds)
+                damage: float,
+                frames_hurt: int
                 ):
         self.x_cord = coords[0]
         self.y_cord = coords[1]
@@ -34,8 +33,8 @@ class Player_object():
         self.jump_speed = jump_speed
         self.hp = hp
         self.damage = damage
-        self.armor = armor
-        self.armor_cd = armor_cd
+
+        self.frames_hurt = frames_hurt
 
         self.state_right = False
         self.state_left = False
@@ -95,7 +94,6 @@ class Player_object():
     Check for out-of-bounds
     """
     def out_of_bounds(self):
-
         if self.pl_sprites.center_x <= 0:
             self.pl_sprites.center_x = 0
             self.pl_sprites.change_x = 0
@@ -131,34 +129,48 @@ class Player_object():
                 self.pl_sprites.center_x += self.movespeed*25
             elif direction == LEFT:
                 self.pl_sprites.center_x -= self.movespeed*25
+
+    """
+    Hurt
+    """
+    def hurt(self, damage: float):
+        self.hp -= damage
+        self.pl_sprites.state_hurt = True
+
+    def update_frame_hitted(self):
+        if self.pl_sprites.state_hurt == True:
+            if self.pl_sprites.cur_texture_index == self.frames_hurt-1:
+                self.pl_sprites.state_hurt = False
+
             
 
     """
     Key press and key release functions
     """
     def move_key_press(self, symbol: int):
-        if symbol == arcade.key.Z:
-            self.dash(LEFT)
-        elif symbol == arcade.key.C:
-            self.dash(RIGHT)
+        if not self.pl_sprites.state_hurt:
+            if symbol == arcade.key.Z:
+                self.dash(LEFT)
+            elif symbol == arcade.key.C:
+                self.dash(RIGHT)
 
-        if symbol == arcade.key.RIGHT:
-            self.state_right = True
-            self.set_x_move()
+            if symbol == arcade.key.RIGHT:
+                self.state_right = True
+                self.set_x_move()
 
-        elif symbol == arcade.key.LEFT:
-            self.state_left = True
-            self.set_x_move()
+            elif symbol == arcade.key.LEFT:
+                self.state_left = True
+                self.set_x_move()
 
-        if symbol == arcade.key.UP or symbol == arcade.key.SPACE:
-            self.state_jump = True
-            self.jump_max_height = self.pl_sprites.center_y + self.jump_height
+            if symbol == arcade.key.UP or symbol == arcade.key.SPACE:
+                self.state_jump = True
+                self.jump_max_height = self.pl_sprites.center_y + self.jump_height
 
-            self.set_y_move()
+                self.set_y_move()
 
-        if symbol == arcade.key.X:
-            self.state_attack = True
-            self.attack()
+            if symbol == arcade.key.X:
+                self.state_attack = True
+                self.attack()
 
         """
         Debug key
@@ -208,6 +220,8 @@ class Player_object():
 
         self.update_jump()
         self.gravity()
+
+        self.update_frame_hitted()
 
 
     def draw(self):
