@@ -8,7 +8,8 @@ def fight(player: Player, enemies: list[Enemy]):
         if abs(player.pl_sprites.center_x - enemy.en_sprites.center_x) <= 100:
             if player.state_attack and not enemy.en_sprites.state_hurt:
                 enemy.hurt(player.damage)
-            if enemy.state_attack and not player.pl_sprites.state_hurt:
+            if enemy.state_attack and not player.pl_sprites.state_hurt and not player.damage_resistance:
+                print("hurt")
                 player.hurt(enemy.damage)
 
             death(player, enemies)

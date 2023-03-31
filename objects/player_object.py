@@ -69,6 +69,7 @@ class Player_object():
     def set_y_move(self):
         if self.state_jump and self.pl_sprites.center_y == self.floor_constant:
             self.pl_sprites.change_y = self.jump_speed
+            self.damage_resistance = True
 
         elif not self.state_jump and self.pl_sprites.center_y != self.floor_constant:
             self.pl_sprites.change_y = 0
@@ -88,6 +89,8 @@ class Player_object():
             self.state_jump = False
             self.jump_max_height = 0
             self.set_y_move()
+
+        self.damage_resistance = True if self.pl_sprites.center_y != self.floor_constant else False
         
 
     """
@@ -191,6 +194,7 @@ class Player_object():
         if symbol == arcade.key.UP or symbol == arcade.key.SPACE:
             self.state_jump = False
             self.jump_max_height = 0
+            self.damage_resistance = False
             self.set_y_move()
 
         if symbol == arcade.key.X:

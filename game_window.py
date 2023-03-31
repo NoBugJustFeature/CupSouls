@@ -33,7 +33,7 @@ class GameWindow(arcade.Window):
     def setup(self):
         self.player = Player("adventurer")
 
-        self.enemies = [Enemy((random.choice([*list(range(-150, 0, 50)), *list(range(self.width, self.width+150, 50))]), 190)) for i in range(3)]
+        self.enemies = [Enemy((random.choice([*list(range(-150, 0, 50)), *list(range(self.width, self.width+150, 50))]), 190)) for i in range(1)]
 
 
     """
