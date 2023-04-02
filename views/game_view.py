@@ -8,23 +8,15 @@ from objects.utils.fight import fight
 import random
 
 
-class GameWindow(arcade.Window):
+class GameView(arcade.View):
     def __init__(self, 
                 width: int = 800, 
-                height: int = 600, 
-                title: str = 'CupSouls', 
-                fullscreen: bool = False, 
-                resizable: bool = False, 
-                FPS: float = 60):
+                height: int = 600):
 
-        """
-        Init screen
-        """
-        self.update_rate = 1/FPS
+        super().__init__()
+        self.width = width
+        self.height = height
 
-        super().__init__(width, height, title, fullscreen, resizable, self.update_rate)
-
-        self.set_location(200, 50)
         self.background = arcade.load_texture("sprites/background/Forest/Image without mist.png")
 
         self.setup()
