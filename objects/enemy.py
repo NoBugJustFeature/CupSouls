@@ -89,7 +89,7 @@ class Enemy (Enemy_object):
         self.en_sprites.hurt_right_textures = [
             arcade.load_texture(f"sprites/enemies/DarkKnight/NightBorne.png",
             x=80*i,
-            y=320,
+            y=240,
             width=80,
             height=80) 
             for i in range(5)]
@@ -97,11 +97,31 @@ class Enemy (Enemy_object):
         self.en_sprites.hurt_left_textures = [
             arcade.load_texture(f"sprites/enemies/DarkKnight/NightBorne.png",
             x=80*i,
-            y=320,
+            y=240,
             width=80,
             height=80,
             mirrored=True) 
             for i in range(5)]
+        
+        """
+        Hurt animation
+        """
+        self.en_sprites.death_right_textures = [
+            arcade.load_texture(f"sprites/enemies/DarkKnight/NightBorne.png",
+            x=80*i,
+            y=320,
+            width=80,
+            height=80) 
+            for i in range(23)]
+
+        self.en_sprites.death_left_textures = [
+            arcade.load_texture(f"sprites/enemies/DarkKnight/NightBorne.png",
+            x=80*i,
+            y=320,
+            width=80,
+            height=80,
+            mirrored=True) 
+            for i in range(23)]
 
         """
         Set variables

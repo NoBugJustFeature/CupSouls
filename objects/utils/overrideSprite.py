@@ -44,6 +44,7 @@ class OverrideSprite(Sprite):
         self.__state_y = STAND
         self.state_attack: bool = False
         self.state_hurt: bool = False
+        self.state_death:bool = False
 
         #Sprites
         self.stand_right_textures: List[Texture] = []
@@ -58,6 +59,8 @@ class OverrideSprite(Sprite):
         self.attack_left_textures: List[Texture] = []
         self.hurt_right_textures: List[Texture] = []
         self.hurt_left_textures: List[Texture] = []
+        self.death_right_textures: List[Texture] = []
+        self.death_left_textures: List[Texture] = []
 
         #Oher
         self.cur_texture_index = 0
@@ -133,8 +136,18 @@ class OverrideSprite(Sprite):
         """
         Load sprites
         """
+        #Death
+        if self.state_death:
+            if self.__state_x == LEFT:
+                texture_list = self.death_left_textures
+
+            elif self.__state_x == RIGHT:
+                texture_list = self.death_right_textures
+
+            self.texture_change_distance = 20
+            self.slowed_change_sprite(texture_list, 8)   
         #Hurt
-        if self.state_hurt:
+        elif self.state_hurt:
             if self.__state_x == LEFT:
                 texture_list = self.hurt_left_textures
 

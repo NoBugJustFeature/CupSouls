@@ -32,7 +32,7 @@ class Enemy_object():
     Actions function
     """
     def action(self, pl_x: float):
-        if not self.en_sprites.state_hurt:
+        if not self.en_sprites.state_hurt and not self.en_sprites.state_death:
             if abs(self.en_sprites.center_x - pl_x) <= 100:
                 self.en_sprites.change_x = 0
                 self.en_sprites.state_attack =True
