@@ -1,11 +1,8 @@
 import arcade
 import arcade.gui as gui
 
-from views.game_view import GameView
-from views.score_view import ScoreView
 
-
-class StartView(arcade.View):
+class ScoreView(arcade.View):
     def __init__(self, 
                 width: int = 800, 
                 height: int = 600):
@@ -17,7 +14,8 @@ class StartView(arcade.View):
         self.background = arcade.load_texture("sprites/background/Forest/Image without mist.png")
 
         self.setup()
-            
+
+
     def setup(self):
         """
         Activate UI manager
@@ -33,40 +31,34 @@ class StartView(arcade.View):
         """
         Create buttons
         """
-        start_button = gui.UIFlatButton(text="Играть",
+        back_button = gui.UIFlatButton(text="Назад",
                                                width=300)
-        results_button = gui.UIFlatButton(text="Результаты",
-                                               width=300)
-        quit_button = gui.UIFlatButton(text="Выход",
-                                               width=300)
+        
+        """
+        Create labels
+        """
+        scores_label = gui.UITextArea(text=self.get_scores(), 
+                                      height = 300,
+                                      text_color=(255, 0, 0, 255), 
+                                      font_size=20)
         
         """
         Add buttons in the group
         """
-        self.v_box.add(start_button.with_space_around(bottom=20))
-        self.v_box.add(results_button.with_space_around(bottom=20))
-        self.v_box.add(quit_button.with_space_around(bottom=20))
+        self.v_box.add(scores_label.with_space_around(bottom=20))
+        self.v_box.add(back_button.with_space_around(bottom=20))
+
 
         """
         Add on-click evenst
         """
-        @start_button.event("on_click")
-        def on_click_start(event):
-            game_view = GameView(self.width,
-                                self.height)
-            
-            self.window.show_view(game_view)
-
-        @results_button.event("on_click")
-        def on_click_score(event):
-            score_view = ScoreView(self.width,
-                                self.height)
-            
-            self.window.show_view(score_view)
-
-        @quit_button.event("on_click")
+        @back_button.event("on_click")
         def om_click_quit(event):
-            arcade.exit()
+            from views.start_view import StartView
+            start_view = StartView(self.width,
+                                self.height)
+            
+            self.window.show_view(start_view)
 
         """
         Create vidget
@@ -87,3 +79,8 @@ class StartView(arcade.View):
                                       height=self.height, 
                                       texture=self.background)
         self.manager.draw()
+
+
+    def get_scores(self) -> str:
+            with open("score.txt", mode="r") as f:
+                return "\n".join(f.readlines())

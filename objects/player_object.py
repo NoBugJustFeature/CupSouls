@@ -34,22 +34,38 @@ class Player_object():
         self.hp = hp
         self.damage = damage
 
-        self.frames_hurt = frames_hurt
+        """
+        Other
+        """
+        self.points = 0
+        self.press_attack = True
 
+        """
+        States
+        """
         self.state_right = False
         self.state_left = False
         self.state_jump = False
         self.state_attack = False
         self.damage_resistance = False
+        self.jump_damage_resistance = False #костыль
         self.state_dash = False
 
-        self.jump_max_height=0
-
+        """
+        Jump
+        """
         self.gravity_constant: float = 5
         self.floor_constant: int = 175 # = self.y_cord
+        self.jump_max_height=0
 
+        """
+        Sprites
+        """
+        self.frames_hurt = frames_hurt
         self.pl_sprites = Sprite()
         self.pl_sprite_list = arcade.SpriteList()
+
+        self.c = 0
 
 
     """
@@ -69,10 +85,7 @@ class Player_object():
     def set_y_move(self):
         if self.state_jump and self.pl_sprites.center_y == self.floor_constant:
             self.pl_sprites.change_y = self.jump_speed
-            self.damage_resistance = True
-
-        elif not self.state_jump and self.pl_sprites.center_y != self.floor_constant:
-            self.pl_sprites.change_y = 0
+            self.jump_damage_resistance = True
 
     
     def gravity(self):
@@ -90,7 +103,7 @@ class Player_object():
             self.jump_max_height = 0
             self.set_y_move()
 
-        self.damage_resistance = True if self.pl_sprites.center_y != self.floor_constant else False
+        self.jump_damage_resistance = True if self.pl_sprites.center_y != self.floor_constant else False
         
 
     """
@@ -118,20 +131,25 @@ class Player_object():
     Attack function
     """
     def attack(self):
-        self.pl_sprites.state_attack = self.state_attack
+        self.pl_sprites.state_attack = self.state_attack = True
 
-
+    def update_frame_attack(self):
+        if self.pl_sprites.state_attack and self.pl_sprites.cur_texture_index == len(self.pl_sprites.attack_right_textures)-1:
+            self.pl_sprites.state_attack = self.state_attack = False
     """
     Dash finction
     """
-    def dash(self, direction):
-        if not self.state_dash:
-            self.state_dash = True
+    def dash(self, direction: str = ""):
+        if self.state_dash:
+            self.state_dash = False
             self.damage_resistance = True
             if direction == RIGHT:
                 self.pl_sprites.center_x += self.movespeed*25
             elif direction == LEFT:
                 self.pl_sprites.center_x -= self.movespeed*25
+        else:
+            self.damage_resistance = False
+
 
     """
     Hurt
@@ -139,11 +157,11 @@ class Player_object():
     def hurt(self, damage: float):
         self.hp -= damage
         self.pl_sprites.state_hurt = True
+        self.damage_resistance = True
 
     def update_frame_hitted(self):
-        if self.pl_sprites.state_hurt == True:
-            if self.pl_sprites.cur_texture_index == self.frames_hurt-1:
-                self.pl_sprites.state_hurt = False
+        if self.pl_sprites.state_hurt == True and self.pl_sprites.cur_texture_index == len(self.pl_sprites.hurt_right_textures)-1:
+            self.pl_sprites.state_hurt = False
 
             
 
@@ -153,8 +171,10 @@ class Player_object():
     def move_key_press(self, symbol: int):
         if not self.pl_sprites.state_hurt:
             if symbol == arcade.key.Z:
+                self.state_dash = True
                 self.dash(LEFT)
             elif symbol == arcade.key.C:
+                self.state_dash = True
                 self.dash(RIGHT)
 
             if symbol == arcade.key.RIGHT:
@@ -172,7 +192,6 @@ class Player_object():
                 self.set_y_move()
 
             if symbol == arcade.key.X:
-                self.state_attack = True
                 self.attack()
 
         """
@@ -194,16 +213,10 @@ class Player_object():
         if symbol == arcade.key.UP or symbol == arcade.key.SPACE:
             self.state_jump = False
             self.jump_max_height = 0
-            self.damage_resistance = False
             self.set_y_move()
 
         if symbol == arcade.key.X:
-            self.state_attack = False
-            self.attack()
-
-        if symbol == arcade.key.Z or symbol == arcade.key.C:
-            self.state_dash = False
-            self.damage_resistance = False
+            self.press_attack = False
 
         """
         Debug key
@@ -226,6 +239,7 @@ class Player_object():
         self.gravity()
 
         self.update_frame_hitted()
+        self.update_frame_attack()
 
 
     def draw(self):

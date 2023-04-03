@@ -20,7 +20,16 @@ class Enemy_object():
         self.movespeed = movespeed
         self.hp = hp
         self.damage = damage
+
+        """
+        States
+        """
         self.state_attack = False
+        self.damage_resistance = False
+
+        """
+        Sprites
+        """
         self.frames_befor_attack = frames_befor_attack
         self.frames_hurt = frames_hurt
 
@@ -57,6 +66,7 @@ class Enemy_object():
     def hurt(self, damage: float):
         self.hp -= damage
         self.en_sprites.state_hurt = True
+        self.damage_resistance = True
 
     def update_frame_hitted(self):
         if self.en_sprites.state_hurt == True:
